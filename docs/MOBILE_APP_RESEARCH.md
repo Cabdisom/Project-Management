@@ -1,172 +1,247 @@
 # Mobile App Research: App Store and Google Play
 
-Date: 2026-10-10
+Date: 2026-10-10 (live store data pulled this day)
 Companion to `RESEARCH.md`.
 
-How this was gathered: the store pages themselves are blocked from the
-research environment, so the numbers below come from search-engine snapshots
-of the official Google Play and App Store listings, plus aggregator sites.
-Snapshots can be days to months old and differ by country. Treat every rating
-as approximate and re-check the live store page before quoting it.
+How this was gathered: the official Google Play and App Store listing pages
+for 10 apps were downloaded directly. Ratings, review counts, download
+counts, star histograms, update dates, and the visible reviews were parsed
+from those pages. Four Google Play screenshots per app were viewed to describe
+the UI. Earlier search-snapshot numbers have been replaced with live ones.
 
 ---
 
-## 1. Ratings at a glance
+## 1. Ratings at a glance (live, 2026-10-10)
 
-Sorted by Google Play rating. Google Play is usually the harsher store, so it
-is the better signal of real-world quality.
+| App | Play rating | Play reviews | Play installs | iOS rating | iOS ratings | Play last update |
+| --- | --- | --- | --- | --- | --- | --- |
+| monday.com | 4.7 | 45.3K | 5M+ | 4.8 | 48.2K | Oct 4, 2026 |
+| Notion | 4.6 | 398K | 10M+ | 4.8 | 90.4K | Oct 2, 2026 |
+| Todoist | 4.6 | 306K | 10M+ | 4.8 | 129.7K | Oct 8, 2026 |
+| TickTick | 4.6 | 165K | 10M+ | 4.9 | 46.3K | Sep 24, 2026 |
+| Linear | 4.6 | 1.3K | 100K+ | 4.8 | 2.2K | Oct 7, 2026 |
+| Basecamp | 4.6 | 26.2K | 1M+ | 4.7 | 20.9K | Sep 29, 2026 |
+| Jira Cloud | 4.3 | 54.4K | 1M+ | 4.7 | 40.7K | Oct 9, 2026 |
+| ClickUp | 4.0 | 21.3K | 1M+ | 4.7 | 9.9K | Oct 2, 2026 |
+| Asana | 3.9 | 45.5K | 5M+ | 4.7 | 15.7K | Oct 8, 2026 |
+| Trello | 3.8 | 123K | 10M+ | 4.3 | 7.0K | Sep 30, 2026 |
 
-| App | Google Play | Reviews | App Store (US) | Ratings | Gap |
-| --- | --- | --- | --- | --- | --- |
-| monday.com | 4.7 | ~45K | 4.8 | ~48K | small |
-| Notion | 4.6 | ~398K | 4.8 | ~90K | small |
-| Todoist | 4.6 | ~306K | 4.9 | small sample | small |
-| TickTick | 4.6 | ~164K | 4.9 | ~46K | small |
-| Linear | 4.6 | ~1.3K | 4.8 | ~2.2K | small |
-| Basecamp | 4.6 | ~26K | 4.7 | ~21K | small |
-| Jira Cloud | 4.4 to 4.6 | ~54K | 4.7 | ~40K | small |
-| Asana | 3.9 to 4.2 | ~45K | 4.7 | ~16K | large |
-| ClickUp | 4.0 | ~20K | 4.7 | ~10K | large |
-| Trello | 3.8 to 3.9 | ~123K | 4.3 to 4.4 | ~7K | large |
+### Star distribution on Google Play
+
+The share of 1-star reviews is the clearest signal of real-world pain.
+
+| App | 5-star share | 1-star share | Read as |
+| --- | --- | --- | --- |
+| monday.com | 87% | 6% | Loved, few angry users |
+| TickTick | 82% | 5% | Loved |
+| Linear | 82% | 7% | Loved by a small audience |
+| Notion | 81% | 4% | Loved at huge scale |
+| Todoist | 81% | 4% | Loved at huge scale |
+| Basecamp | 81% | 5% | Loved, but May 2026 redesign is souring it |
+| Jira Cloud | 74% | 10% | Mixed |
+| ClickUp | 63% | 17% | Polarised |
+| Asana | 59% | 20% | Polarised. One in five users gives 1 star |
+| Trello | 51% | 18% | Polarised. Half the users are unhappy |
 
 What stands out:
 
-- **Trello, Asana, and ClickUp score much worse on Android than iOS.** All
-  three are big web products whose mobile apps lag behind. That gap is a
-  recurring complaint and an opening.
-- **Personal task apps (Todoist, TickTick) are the best rated.** They are
-  mobile-first, do one thing, and work offline.
-- **Linear has tiny review counts.** Its mobile app is a companion, not the
-  main product. The engineering market mostly lives on desktop.
-- **Notion has by far the most Android reviews** at roughly 400K, showing how
-  large the "docs plus tasks" audience is.
-- **Basecamp's rating is sliding.** Reviews from May and June 2026 are
-  strongly negative after the Basecamp 5 redesign (random project order, no
-  scrollable project list, harder grid and calendar).
+- **Trello, Asana, and ClickUp are polarised on Android.** Roughly one in
+  five Android reviewers gives them 1 star. All three are big web products
+  whose mobile apps lag behind.
+- **The iOS gap is large for the same three.** Asana is 4.7 on iOS and 3.9
+  on Android. Trello is 4.3 vs 3.8. ClickUp is 4.7 vs 4.0. Android quality
+  is where they are losing.
+- **Personal task apps (Todoist, TickTick) are the best rated at scale**,
+  with 300K and 165K Android reviews and a 4 to 5 percent 1-star share.
+- **Linear has tiny review counts** (1.3K Android, 2.2K iOS). Its mobile
+  app is a companion. The engineering market lives on desktop.
+- **Notion has by far the most Android reviews** at nearly 400K, showing
+  how large the "docs plus tasks" audience is.
+- **Everyone ships often.** Every app was updated within the last 16 days.
+- **Basecamp's rating is sliding.** Reviews from May 2026 onward are
+  strongly negative after the Basecamp 5 redesign.
 
-## 2. What each app does on mobile
+## 2. What the screenshots show (UI)
 
-| App | Mobile home screen | Core mobile features | Mobile-only limits |
-| --- | --- | --- | --- |
-| Trello | Boards list, then a board with swipeable columns | Cards, checklists, labels, due dates, attachments, Butler automations | Weak reminders, lag vs web, description formatting differs from web |
-| Asana | Home, My Tasks, Inbox, Search, Account tabs | Tasks, projects, list and board views, comments, approvals, some automation | Cannot create a team, cannot deactivate account, conversations hard to find, no cold-start offline |
-| monday.com | Boards and "My Work" | Kanban, timeline, charts views, updates, notifications | Dashboards and workspace setup need desktop; 3-seat minimum complained about |
-| ClickUp | Home, Inbox, Search, Docs, Tasks | Tasks, docs, chat, AI, multiple views | Cluttered, slow to load, crashes, poor iPad support, recurring task bugs |
-| Notion | Pages and Home tabs, recent pages | Pages, databases, tasks, AI, templates | No offline mode (most-requested feature), workspace settings need desktop, AI pushed into UI |
-| Jira Cloud | Home with starred boards and recent issues | Boards, backlog, issues, transitions, comments, notifications | Missing fields vs web, freezes and blank pages, notification problems |
-| Linear | Home (My Issues, favorites, teams), Inbox, Search | Triage, status updates, inbox swipe and snooze, Priority inbox (Sep 2026), document editing | No full offline on iOS per reviews, search buried in menus, titles truncated |
-| Basecamp | Hey! (inbox), Home, Activity, Me | Message boards, to-dos, schedule, docs, campfire chat, pings | Post-redesign navigation confusion, missing notifications |
-| Todoist | Today, Upcoming, Browse, Search | Natural-language quick add, projects, labels, filters, calendar | Few team features, slower cold start historically |
-| TickTick | Tasks, Calendar, Pomodoro, Habits | To-do lists, calendar, reminders, habit tracker, focus timer | Limited calendar, settings hard to find, subscription complaints |
+Four store screenshots per app were reviewed. This is what each app chooses
+to show first, which is what they think sells.
 
-## 3. UI patterns that work on mobile
+| App | Visual style | Bottom bar | First screen shown | Notable |
+| --- | --- | --- | --- | --- |
+| Trello | Bright blue, white cards | Boards, Inbox, Planner, Activity, Account | Inbox (card capture), then a calendar Planner | Pushes "Inbox" and "My work" over boards. Due-date notification with quick actions. |
+| Asana | Rich colour per screen, white cards | Home, Inbox, My Tasks, Search, Account | Home with Recents and starred Projects | Inbox groups by project with "Relevant first". My Tasks grouped Top priority, Due today. |
+| monday.com | Purple, colour-coded status pills | Not shown in screenshots | Board grouped by month with Done, Working on it, Stuck | "My work" with counts Past week, Today, This week, Later. Notification filters: All, Unread, Mentioned. |
+| ClickUp | White, pastel tiles, AI prominent | Not shown | Home with Replies, Today, Assigned, Activity tiles | Search bar on every screen. Inbox with Primary count. Whole screen for AI chat. |
+| Notion | Minimal black and white, emoji icons | Not shown | "Jump back in" recents plus page tree | Docs-first. Tasks appear only as database lists. |
+| Jira Cloud | Illustrated marketing, little real UI | Not shown | Create issue form | Store page shows illustrations, not screens. Suggests the real UI is not a selling point. |
+| Linear | Dark, dense, monochrome | Home, Inbox, Create, Cycles, Search | Sidebar with Favorites and Teams, then Inbox | Inbox swipe actions (Unread). Create issue with chips for Triage, Priority, Assignee, Label, Cycle. Push notification deep links. |
+| Basecamp | Blue, card grid, friendly | Home, Hey!, Activity (3 round buttons) | Project grid with Activity, Calendar, Reports, Everything | Message boards, to-do lists, and card tables as separate tools. |
+| Todoist | Warm pastels, red accent | Sidebar: Inbox, Today, Upcoming, Team projects | Voice capture and natural-language quick add | "every Monday +Maria" parsed from text. Calendar time-blocking view. |
+| TickTick | Light blue, calendar heavy | Hamburger sidebar | Inbox grouped Today, Tomorrow | Calendar, Eisenhower priority matrix, AI voice add. |
 
-Consistent across the top-rated apps and the help docs of mid-tier ones:
+Patterns across the screenshots:
 
-1. **Bottom tab bar, 4 or 5 tabs.** The common set is Home, My Tasks (or
-   Inbox), Search, Notifications, Account. Everything else is reached from
-   those.
-2. **A personal view first.** "My Tasks", "My Work", "My Issues", "Today".
-   People open the phone app to see what they owe, not to browse projects.
-3. **Inbox with swipe actions.** Linear's swipe-to-archive and snooze is the
-   most praised mobile interaction in any of the reviews.
-4. **Board view = horizontal swipe between columns.** One column fills the
-   screen. Press-and-hold to drag a card to another column.
-5. **Quick add button always visible.** A floating plus or a bottom bar
-   button. Todoist's natural-language entry ("tomorrow 3pm #marketing") is
-   repeatedly praised.
-6. **Task detail as a full-screen sheet** with title, status, assignee, due
-   date, description, then comments. Not a cramped card.
-7. **Push notifications that deep-link** to the exact task or comment.
-   Broken notifications are one of the top three complaints for Jira,
-   Basecamp, and Trello.
+1. **Everyone has an Inbox.** Trello, Asana, monday, ClickUp, Linear,
+   Todoist, TickTick all put a notification or capture Inbox in the main
+   navigation. It is the most common screen after the task list.
+2. **"My work" beats "Projects".** Asana (My Tasks), monday (My work),
+   Trello (My work), ClickUp (Today, Assigned) all lead with a personal view.
+3. **Quick capture is a headline feature.** Todoist (voice plus natural
+   language), TickTick (AI voice add), Linear (create issue with chips),
+   Trello (Inbox capture).
+4. **Status is shown as coloured pills**, not icons. monday is the extreme
+   case. Asana and Linear use small coloured dots.
+5. **Light theme with one brand colour** is the norm. Linear is the only
+   dark-by-default app and it looks the most "pro".
+6. **AI is being pushed into the main screen** by ClickUp and TickTick. The
+   reviews below suggest users are not asking for it.
+
+## 3. What recent reviews say (live, visible on store pages)
+
+Direct from the Google Play listing pages, newest first where available.
+
+**Trello**
+- Jul 2026: "I've recently lost notes I had added in many cards and the
+  Labels don't work."
+- May 2026: search shows which board a card is in, but does not jump to it.
+- Store page also shows reviewers using it as a personal notebook, not for
+  teams.
+
+**Asana**
+- Jun 2026: after a phone upgrade "this app isn't as user-friendly", could
+  no longer type directly into fields.
+- May 2025: "won't maintain sorting by due date", subtask reordering moves
+  the wrong item.
+- Jun 2025: cancellation friction and a surprise discount offer at cancel.
+
+**monday.com**
+- Aug 2026: "calendar view doesn't let me see any details at all, only a
+  dot."
+- 2023: Android version "CONSTANTLY crashing" while desktop worked.
+- "Only for teams. If you are on your own, don't waste your time."
+
+**ClickUp**
+- Apr 2026: endless login loop on Android.
+- Nov 2025: "I really enjoy ClickUp desktop, but the app needs some serious
+  work."
+- 2022: could not link the mobile app to an existing account.
+
+**Notion**
+- Jul 2026: strongly positive, "they had me at hello".
+- Feb 2026: line spacing bug when writing.
+- Sep 2025: "superior alternative to most writing docs until the AI
+  rebrand."
+
+**Jira Cloud**
+- Comment editor moves the cursor and inserts blank lines.
+- "Compared to the website, the app is VERY lacking." Backlog missing.
+- Notification taps lead to blank pages.
+
+**Linear**
+- Sep 2026: "cannot manually click and drag to reorder issues", Done
+  issues disappear from every filter.
+- Jul 2026: "finding simple things like search is always buried under
+  unintuitive menus."
+- Aug 2026: praised for simplicity and price versus competitors.
+
+**Basecamp**
+- May 26 and May 30, 2026: "Update is a mess", bookmarks gone, messaging
+  hard to find, items marked "don't forget" lost.
+
+**Todoist**
+- Dec 2024: "I don't just use it every day, I rely on it every day."
+- Reminders are paid-only, a long-standing complaint.
+
+**TickTick**
+- Aug and Sep 2026: "App is a joy to use", "all I need is my phone."
+- Jul 2025: repeat and reminder settings hard to find.
 
 ## 4. Top complaints across all apps
 
-Ranked by how often they appear.
+Ranked by how often they appear in the live reviews and aggregator sites.
 
-1. **Feature gaps vs the web app.** "Compared to the website the app is very
-   lacking." Appears for Jira, Asana, ClickUp, Linear, monday, Notion.
-2. **Crashes and freezes.** ClickUp, monday (Android), Jira, Trello desktop.
-3. **No or weak offline mode.** Notion (most requested), Asana, Linear iOS,
-   Trello.
-4. **Slow loading.** ClickUp, Trello, Todoist historically.
-5. **Notifications unreliable.** Jira, Basecamp, Trello.
-6. **Confusing navigation after redesigns.** Basecamp 5, Linear search.
-7. **Pricing friction surfaced in-app.** Seat minimums (monday, Asana),
-   subscription pushes (TickTick), AI features forced into the UI (Notion).
-8. **Tablet support poor.** ClickUp iPad, Notion Mail iPad.
+1. **Mobile missing features the web has.** Jira, Asana, ClickUp, Linear,
+   monday, Notion.
+2. **Crashes, freezes, login loops.** ClickUp, monday (Android), Jira.
+3. **Data loss or sync bugs.** Trello notes lost, Basecamp items lost,
+   Asana sort order lost.
+4. **No or weak offline mode.** Notion (most requested), Asana, Linear.
+5. **Search that does not deep-link.** Trello, Linear.
+6. **Notifications that open blank pages.** Jira, Basecamp.
+7. **Redesigns that hide things.** Basecamp 5, Linear navigation.
+8. **Pricing friction in-app.** Seat minimums (monday), paid reminders
+   (Todoist), AI pushed into the UI (Notion, ClickUp).
+9. **Not useful for solo users.** monday.
 
 ## 5. What this means for our app
 
-- **Mobile is where the big players are weakest.** Trello, Asana, and
-  ClickUp all sit around 4.0 on Android. A mobile app that is fast, stable,
-  and works offline beats them on their worst surface.
-- **Build the phone app around "me", not "projects".** My Tasks and Inbox
-  are the two screens that matter. Project browsing is secondary.
-- **Offline-first pays off twice.** It is the most requested missing feature
-  and it also removes the "slow loading" complaint. This strengthens the case
-  in `RESEARCH.md` for a sync-engine architecture, at least for mobile.
-- **Keep feature parity honest.** Decide which features are mobile and which
-  are desktop-only, and say so in the app rather than hiding them.
-- **Notifications must deep-link and must be reliable.** This is table
-  stakes and still broken in apps with 50K reviews.
-- **Do not push upsells or AI into the core flow.** Notion and TickTick lose
+- **Android quality is the opening.** Trello, Asana, and ClickUp lose a
+  full star on Android. A fast, stable Android app that never loses data
+  beats them on their weakest surface.
+- **Build the phone app around "me".** Inbox and My Tasks are the two
+  screens every top app leads with. Project browsing is secondary.
+- **Quick capture is a feature, not a button.** Natural-language entry like
+  Todoist's ("Friday 13:00 p2 +Alex") is the most praised interaction in the
+  whole set.
+- **Offline-first removes two complaints at once.** It is the most
+  requested missing feature and it also kills "slow loading" and "lost my
+  notes". This strengthens the sync-engine case in `RESEARCH.md`.
+- **Search and notifications must deep-link to the exact item.** Still
+  broken in apps with 50K reviews.
+- **Keep feature parity honest.** Show desktop-only features as such rather
+  than hiding them.
+- **Do not push AI or upsells into the core flow.** Notion and ClickUp lose
   stars for it.
-- **Ship a simple bottom bar: Home, My Tasks, Inbox, Search, Profile.** Quick
-  add always one tap away.
+- **Bottom bar: Home, My Tasks, Inbox, Search, Profile.** A create button
+  always one tap away. Light theme with one accent colour, dark mode
+  available.
 
 ## 6. Open questions for you
 
 1. Is the phone app a first-class product or a companion to the web app?
-   Linear treats it as a companion; Todoist treats it as the product.
+   Todoist treats it as the product. Linear treats it as a companion.
 2. Native (Swift and Kotlin), cross-platform (React Native or Flutter), or a
    responsive web app first? Offline-first is easiest in native or React
    Native with a sync engine.
-3. Which store do we launch on first? Android is the harsher audience and
-   the bigger one for most of these apps.
+3. Android first? It is the harsher audience and where the incumbents are
+   weakest.
 
 ## 7. Sources
 
-Store listings (via search snapshots)
-- [Asana on Google Play](https://play.google.com/store/apps/details?id=com.asana.app&hl=en)
-- [Asana on the App Store](https://apps.apple.com/us/app/asana-work-in-one-place/id489969512)
-- [Trello on Google Play](https://play.google.com/store/apps/details?id=com.trello&hl=en_US)
-- [Trello on the App Store](https://apps.apple.com/us/app/trello-organize-anything/id461504587)
-- [monday.com on Google Play](https://play.google.com/store/apps/details?id=com.monday.monday&hl=en_CA)
-- [monday.com on the App Store](https://apps.apple.com/us/app/monday-com-work-management/id1290128888)
-- [ClickUp on Google Play](https://play.google.com/store/apps/details?id=co.mangotechnologies.clickup&hl=en_US)
-- [ClickUp on the App Store](https://apps.apple.com/us/app/clickup-tasks-chat-docs-ai/id1535098836)
-- [Notion on Google Play](https://play.google.com/store/apps/details?id=notion.id&hl=en_CA)
-- [Notion on the App Store](https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281)
-- [Jira Cloud on Google Play](https://play.google.com/store/apps/details?id=com.atlassian.android.jira.core&hl=en_NZ)
-- [Jira Cloud on the App Store](https://apps.apple.com/us/app/jira-cloud-by-atlassian/id1006972087)
+Store listings (downloaded 2026-10-10)
+- [Asana on Google Play](https://play.google.com/store/apps/details?id=com.asana.app)
+- [Asana on the App Store](https://apps.apple.com/us/app/id489969512)
+- [Trello on Google Play](https://play.google.com/store/apps/details?id=com.trello)
+- [Trello on the App Store](https://apps.apple.com/us/app/id461504587)
+- [monday.com on Google Play](https://play.google.com/store/apps/details?id=com.monday.monday)
+- [monday.com on the App Store](https://apps.apple.com/us/app/id1290128888)
+- [ClickUp on Google Play](https://play.google.com/store/apps/details?id=co.mangotechnologies.clickup)
+- [ClickUp on the App Store](https://apps.apple.com/us/app/id1535098836)
+- [Notion on Google Play](https://play.google.com/store/apps/details?id=notion.id)
+- [Notion on the App Store](https://apps.apple.com/us/app/id1232780281)
+- [Jira Cloud on Google Play](https://play.google.com/store/apps/details?id=com.atlassian.android.jira.core)
+- [Jira Cloud on the App Store](https://apps.apple.com/us/app/id1006972087)
 - [Linear on Google Play](https://play.google.com/store/apps/details?id=app.linear)
-- [Linear Mobile on the App Store](https://apps.apple.com/us/app/linear-mobile/id1645587184)
-- [Basecamp on Google Play](https://play.google.com/store/apps/details?id=com.basecamp.bc3&hl=en)
-- [Basecamp on the App Store](https://apps.apple.com/us/app/basecamp-project-management/id1015603248)
-- [Todoist on Google Play](https://play.google.com/store/apps/details?id=com.todoist&hl=en_CA)
-- [Todoist on the App Store](https://apps.apple.com/ee/app/todoist-to-do-list-calendar/id572688855)
-- [TickTick on Google Play](https://play.google.com/store/apps/details?id=com.ticktick.task&hl=en_US)
-- [TickTick on the App Store](https://apps.apple.com/us/app/ticktick-to-do-list-calendar/id626144601)
+- [Linear Mobile on the App Store](https://apps.apple.com/us/app/id1645587184)
+- [Basecamp on Google Play](https://play.google.com/store/apps/details?id=com.basecamp.bc3)
+- [Basecamp on the App Store](https://apps.apple.com/us/app/id1015603248)
+- [Todoist on Google Play](https://play.google.com/store/apps/details?id=com.todoist)
+- [Todoist on the App Store](https://apps.apple.com/us/app/id572688855)
+- [TickTick on Google Play](https://play.google.com/store/apps/details?id=com.ticktick.task)
+- [TickTick on the App Store](https://apps.apple.com/us/app/id626144601)
 
 Reviews and comparisons
 - [ClickUp reviews on Capterra](https://capterra.com/p/158833/ClickUp/reviews/)
 - [ClickUp reviews on Trustpilot](https://uk.trustpilot.com/review/clickup.com?page=4)
 - [Linear Mobile reviews (JustUseApp)](https://justuseapp.com/en/app/1645587184/linear-mobile/reviews)
-- [Trello vs Asana vs ClickUp vs Notion (SaaSworthy)](https://www.saasworthy.com/compare/trello-vs-asana-vs-clickup-vs-notion-so?pIds=146,1605,1610,2556)
 - [Asana vs Trello (Digital Project Manager)](https://thedigitalprojectmanager.com/tools/asana-vs-trello/)
 - [Asana vs Linear (eesel)](https://www.eesel.ai/blog/asana-vs-linear)
-- [Trello vs Asana (Plaky)](https://plaky.com/blog/trello-vs-asana/)
 - [Best iOS project management apps (ClickUp)](https://clickup.com/blog/ios-project-management-apps/)
 - [Mobile PM apps for client work (Teamwork)](https://www.teamwork.com/blog/mobile-app-project-management/)
-- [Best PM apps for iPhone (GetApp)](https://www.getapp.com/project-management-planning-software/project-management/os/iphone/)
 
 Official docs and changelogs
 - [Linear: get the app](https://linear.app/docs/get-the-app.md)
 - [Linear: Inbox](https://linear.app/docs/inbox)
 - [Linear: Priority inbox (Sep 2026)](https://linear.app/changelog/2026-09-03-priority-inbox)
-- [Linear: Introducing Linear Mobile](https://linear.app/changelog/2024-09-19-introducing-linear-mobile)
 - [Quire mobile navigation](https://quire.io/guide/mobile-app-navigation)
 - [Teamwork mobile boards](https://support.teamwork.com/projects/mobile-apps/working-with-your-projects-mobile)
-- [Taskade mobile optimization](https://docs.taskade.com/docs/core-features/mobile-optimization)
