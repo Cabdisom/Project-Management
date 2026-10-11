@@ -14,9 +14,10 @@ export async function takePendingInvite(): Promise<string | null> {
 }
 
 export function inviteUrl(token: string): string {
+  const configured = process.env.EXPO_PUBLIC_WEB_URL?.replace(/\/$/, '');
+  if (configured) return `${configured}/invite/${token}`;
   if (Platform.OS === 'web' && typeof window !== 'undefined') {
     return `${window.location.origin}/invite/${token}`;
   }
-  const base = process.env.EXPO_PUBLIC_WEB_URL ?? 'https://your-app-url';
-  return `${base}/invite/${token}`;
+  return `https://your-app-url/invite/${token}`;
 }

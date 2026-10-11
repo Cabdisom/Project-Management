@@ -6,6 +6,9 @@ backend.
 
 Research, feature list and decisions are in `docs/`.
 
+**Live web app:** https://cabdisom.github.io/Project-Management/ (deployed by
+GitHub Actions on every push to the main development branch).
+
 ## What it does
 
 - **My Tasks**: everything assigned to you, grouped by Overdue, Today, Tomorrow, Later.

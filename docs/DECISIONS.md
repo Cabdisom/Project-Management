@@ -2,6 +2,12 @@
 
 Short record of product and technical decisions, newest first.
 
+## 2026-10-11: Web app hosted on GitHub Pages
+
+- Repo made public so GitHub Pages works on the free plan.
+- Live at https://cabdisom.github.io/Project-Management/
+- A GitHub Actions workflow builds and deploys on every push.
+
 ## 2026-10-11: Version 1 built and tested on web
 
 - Stack: Expo SDK 57 with Expo Router, React Native, TypeScript, TanStack
