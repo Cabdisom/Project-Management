@@ -91,12 +91,12 @@ export default function InboxScreen() {
             {list.map((n) => {
               const unreadRow = !n.read_at;
               return (
+                <View key={n.id} style={[styles.rowWrap, { backgroundColor: unreadRow ? theme.unread : 'transparent', borderBottomColor: theme.border }]}>
                 <Pressable
-                  key={n.id}
                   accessibilityRole="button"
                   onPress={() => open(n)}
                   onLongPress={() => setSnoozeFor(n)}
-                  style={({ pressed }) => [styles.row, { backgroundColor: unreadRow ? theme.unread : 'transparent', borderBottomColor: theme.border, opacity: pressed ? 0.7 : 1 }]}>
+                  style={({ pressed }) => [styles.row, { opacity: pressed ? 0.7 : 1 }]}>
                   {n.actor ? (
                     <Avatar name={n.actor.full_name} color={n.actor.avatar_color} size={36} />
                   ) : (
@@ -114,8 +114,9 @@ export default function InboxScreen() {
                     </Text>
                   </View>
                   {unreadRow ? <View style={[styles.dot, { backgroundColor: theme.accent }]} /> : null}
-                  <IconButton name="more" label="Options" size={18} color={theme.textFaint} onPress={() => setSnoozeFor(n)} style={styles.moreButton} />
                 </Pressable>
+                <IconButton name="more" label="Options" size={18} color={theme.textFaint} onPress={() => setSnoozeFor(n)} style={styles.moreButton} />
+                </View>
               );
             })}
           </View>
@@ -148,11 +149,12 @@ export default function InboxScreen() {
 const styles = StyleSheet.create({
   textButton: { minHeight: 44, justifyContent: 'center', paddingHorizontal: 4 },
   sectionPad: { paddingHorizontal: Spacing.three },
-  row: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, paddingHorizontal: Spacing.three, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth },
+  rowWrap: { flexDirection: 'row', alignItems: 'flex-start', borderBottomWidth: StyleSheet.hairlineWidth, paddingRight: Spacing.two },
+  row: { flex: 1, flexDirection: 'row', alignItems: 'flex-start', gap: 12, paddingLeft: Spacing.three, paddingVertical: 12 },
   kindIcon: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   body: { flex: 1, gap: 3, minWidth: 0 },
   text: { fontSize: 15, lineHeight: 20 },
   meta: { fontSize: 13 },
   dot: { width: 8, height: 8, borderRadius: 4, marginTop: 7 },
-  moreButton: { width: 32, height: 32, marginTop: -6, marginRight: -8 },
+  moreButton: { width: 36, height: 36, marginTop: 8 },
 });

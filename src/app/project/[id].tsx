@@ -159,14 +159,15 @@ function Card({ task, onMove }: { task: TaskListItem; onMove: () => void }) {
   const overdue = !done && isOverdue(task.due_at);
   const pr = PriorityColors[task.priority];
   return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={() => router.push({ pathname: '/task/[id]', params: { id: task.id } })}
-      onLongPress={onMove}
-      style={({ pressed }) => [styles.card, { backgroundColor: theme.background, borderColor: theme.border, opacity: pressed ? 0.8 : done ? 0.75 : 1 }]}>
+    <View style={[styles.card, { backgroundColor: theme.background, borderColor: theme.border, opacity: done ? 0.75 : 1 }]}>
+      <IconButton name="more" label="Move task" size={16} color={theme.textFaint} onPress={onMove} style={styles.cardMore} />
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => router.push({ pathname: '/task/[id]', params: { id: task.id } })}
+        onLongPress={onMove}
+        style={({ pressed }) => [styles.cardBody, { opacity: pressed ? 0.7 : 1 }]}>
       <View style={styles.cardTop}>
         <Text style={[styles.cardTitle, { color: done ? theme.textSecondary : theme.text, textDecorationLine: done ? 'line-through' : 'none' }]}>{task.title}</Text>
-        <IconButton name="more" label="Move task" size={16} color={theme.textFaint} onPress={onMove} style={styles.cardMore} />
       </View>
       <View style={styles.cardBottom}>
         {task.due_at ? (
@@ -182,7 +183,8 @@ function Card({ task, onMove }: { task: TaskListItem; onMove: () => void }) {
           {task.assignee ? <Avatar name={task.assignee.full_name} color={task.assignee.avatar_color} size={24} /> : null}
         </View>
       </View>
-    </Pressable>
+      </Pressable>
+    </View>
   );
 }
 
@@ -197,10 +199,11 @@ const styles = StyleSheet.create({
   columnScroll: { flexGrow: 0 },
   columnList: { gap: 10, paddingBottom: 120 },
   dot: { width: 10, height: 10, borderRadius: 5 },
-  card: { borderRadius: 12, borderWidth: StyleSheet.hairlineWidth, padding: 12, gap: 10 },
-  cardTop: { flexDirection: 'row', alignItems: 'flex-start', gap: 4 },
+  card: { borderRadius: 12, borderWidth: StyleSheet.hairlineWidth },
+  cardBody: { padding: 12, gap: 10 },
+  cardTop: { flexDirection: 'row', alignItems: 'flex-start', gap: 4, paddingRight: 24 },
   cardTitle: { flex: 1, fontSize: 15, fontWeight: '500', lineHeight: 20 },
-  cardMore: { width: 28, height: 28, marginTop: -6, marginRight: -6 },
+  cardMore: { position: 'absolute', top: 4, right: 4, width: 32, height: 32, zIndex: 1 },
   cardBottom: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   inline: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   addRow: { flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 40, paddingHorizontal: 8 },
