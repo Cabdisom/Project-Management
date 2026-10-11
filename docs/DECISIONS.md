@@ -2,6 +2,18 @@
 
 Short record of product and technical decisions, newest first.
 
+## 2026-10-11: Motion and feel, inspired by Things 3, Todoist and Linear
+
+- Completion is a reward: the circle pops and fills, a haptic tap fires, and
+  the row slides out after a short delay (Things 3 pattern).
+- Swipe gestures on rows: task right = done, left = tomorrow; inbox right =
+  clear, left = snooze (Todoist and Mail pattern).
+- Lists stagger in, bottom sheets spring up, progress bars animate, buttons
+  and cards shrink slightly on press, skeletons replace spinners.
+- All motion lives in `src/components/motion.tsx` and uses Reanimated layout
+  animations, so it works on web and native alike. Keep animations under
+  250 ms so routine use never feels slower.
+
 ## 2026-10-11: Web app hosted on GitHub Pages
 
 - Repo made public so GitHub Pages works on the free plan.

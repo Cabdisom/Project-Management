@@ -25,6 +25,7 @@ export default function AppTabs() {
     <Tabs
       screenOptions={{
         headerShown: false,
+        animation: 'fade',
         tabBarPosition: sidebar ? 'left' : 'bottom',
         tabBarLabelPosition: sidebar ? 'beside-icon' : 'below-icon',
         tabBarActiveTintColor: theme.accent,

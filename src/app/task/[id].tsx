@@ -1,10 +1,12 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import Animated, { FadeInDown, LinearTransition } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Avatar } from '@/components/avatar';
 import { Icon } from '@/components/icon';
+import { Checkbox } from '@/components/motion';
 import { OptionSheet } from '@/components/sheet';
 import { Chip, Empty, IconButton, Loading, ProgressBar, Screen } from '@/components/ui';
 import { PriorityColors, Spacing } from '@/constants/theme';
@@ -114,14 +116,9 @@ export default function TaskScreen() {
       }>
       <View style={styles.content}>
         <View style={styles.titleRow}>
-          <Pressable
-            accessibilityRole="checkbox"
-            accessibilityState={{ checked: done }}
-            accessibilityLabel={done ? 'Mark as not done' : 'Mark as done'}
-            onPress={() => toggle.mutate({ task, completed: !done })}
-            style={[styles.check, { borderColor: done ? theme.accent : theme.textFaint, backgroundColor: done ? theme.accent : 'transparent' }]}>
-            {done ? <Icon name="check" size={16} color={theme.onAccent} weight="bold" /> : null}
-          </Pressable>
+          <View style={styles.check}>
+            <Checkbox checked={done} size={28} delay={150} onChange={(next) => toggle.mutate({ task, completed: next })} />
+          </View>
           <TextInput
             value={title}
             onChangeText={setTitle}
@@ -202,18 +199,11 @@ export default function TaskScreen() {
             ) : null}
           </View>
           {task.subtasks.map((s) => (
-            <View key={s.id} style={styles.subtask}>
-              <Pressable
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked: s.is_done }}
-                accessibilityLabel={s.title}
-                onPress={() => subtasks.toggle.mutate({ id: s.id, done: !s.is_done })}
-                style={[styles.subCheck, { borderColor: s.is_done ? theme.accent : theme.textFaint, backgroundColor: s.is_done ? theme.accent : 'transparent' }]}>
-                {s.is_done ? <Icon name="check" size={12} color={theme.onAccent} weight="bold" /> : null}
-              </Pressable>
+            <Animated.View key={s.id} entering={FadeInDown.duration(200)} layout={LinearTransition.duration(200)} style={styles.subtask}>
+              <Checkbox checked={s.is_done} size={20} delay={0} label={s.title} onChange={(next) => subtasks.toggle.mutate({ id: s.id, done: next })} />
               <Text style={[styles.subText, { color: s.is_done ? theme.textFaint : theme.text, textDecorationLine: s.is_done ? 'line-through' : 'none' }]}>{s.title}</Text>
               <IconButton name="close" label="Remove subtask" size={16} color={theme.textFaint} onPress={() => subtasks.remove.mutate(s.id)} style={styles.subRemove} />
-            </View>
+            </Animated.View>
           ))}
           <View style={styles.subtask}>
             <Icon name="plus" size={18} color={theme.textFaint} style={{ marginHorizontal: 1 }} />
@@ -241,7 +231,7 @@ export default function TaskScreen() {
           </Text>
           {task.comments.length === 0 ? <Text style={{ color: theme.textFaint, fontSize: 14 }}>No comments yet.</Text> : null}
           {task.comments.map((c) => (
-            <View key={c.id} style={styles.comment}>
+            <Animated.View key={c.id} entering={FadeInDown.duration(220)} layout={LinearTransition.duration(200)} style={styles.comment}>
               <Avatar name={c.author?.full_name} color={c.author?.avatar_color} size={30} />
               <View style={styles.commentBody}>
                 <Text style={{ fontSize: 13, color: theme.text }}>
@@ -250,7 +240,7 @@ export default function TaskScreen() {
                 </Text>
                 <Text style={{ fontSize: 15, lineHeight: 21, color: theme.text }}>{c.body}</Text>
               </View>
-            </View>
+            </Animated.View>
           ))}
         </View>
 
@@ -364,7 +354,7 @@ function describeActivity(kind: string): string {
 const styles = StyleSheet.create({
   content: { paddingHorizontal: Spacing.three, paddingTop: Spacing.three, gap: Spacing.three },
   titleRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
-  check: { width: 28, height: 28, borderRadius: 14, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginTop: 2 },
+  check: { marginTop: 2 },
   title: { flex: 1, fontSize: 22, fontWeight: '700', lineHeight: 28, letterSpacing: -0.2, padding: 0 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   fields: { borderTopWidth: StyleSheet.hairlineWidth },
@@ -379,7 +369,6 @@ const styles = StyleSheet.create({
   sectionRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   sectionTitle: { fontSize: 14, fontWeight: '600' },
   subtask: { flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: 36 },
-  subCheck: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
   subText: { flex: 1, fontSize: 15 },
   subRemove: { width: 32, height: 32 },
   subInput: { flex: 1, fontSize: 15, minHeight: 36, padding: 0 },

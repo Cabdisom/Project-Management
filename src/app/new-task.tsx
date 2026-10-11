@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import { OptionSheet } from '@/components/sheet';
 import { Button, Chip, IconButton, Screen } from '@/components/ui';
@@ -99,7 +100,7 @@ export default function NewTaskScreen() {
             blurOnSubmit
           />
 
-          <View style={styles.chips}>
+          <Animated.View style={styles.chips} layout={LinearTransition.duration(200)}>
             <Chip
               icon="calendar"
               label={dueAt ? formatDue(dueAt.toISOString()) : 'Due date'}
@@ -130,7 +131,7 @@ export default function NewTaskScreen() {
               onPress={() => setPicker('assignee')}
               dashed={!assignee}
             />
-          </View>
+          </Animated.View>
 
           <View style={styles.footer}>
             <Text style={[styles.count, { color: theme.textFaint }]}>{parsed.title.trim() ? `"${parsed.title.trim()}"` : ''}</Text>

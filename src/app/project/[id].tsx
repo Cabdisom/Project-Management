@@ -1,13 +1,15 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import Animated, { FadeInDown, FadeOut, LinearTransition } from 'react-native-reanimated';
 
 import { Avatar } from '@/components/avatar';
 import { Fab } from '@/components/fab';
 import { Icon } from '@/components/icon';
+import { PressableScale, SkeletonList, haptic } from '@/components/motion';
 import { OptionSheet } from '@/components/sheet';
 import { TaskRow } from '@/components/task-row';
-import { Empty, IconButton, Loading, Screen, SectionHeader, Segmented } from '@/components/ui';
+import { Empty, IconButton, Screen, SectionHeader, Segmented } from '@/components/ui';
 import { PriorityColors, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { formatDue, formatShortDate, isOverdue } from '@/lib/dates';
@@ -35,8 +37,8 @@ export default function ProjectScreen() {
 
   if (isLoading) {
     return (
-      <Screen back="/projects">
-        <Loading />
+      <Screen back="/projects" title="Loading…">
+        <SkeletonList rows={4} avatar />
       </Screen>
     );
   }
@@ -84,16 +86,20 @@ export default function ProjectScreen() {
             style={{ backgroundColor: theme.surfaceAlt }}>
             {columns
               .filter((c) => !(hideDone && c.status.is_done))
-              .map(({ status, tasks: list }) => (
-                <View key={status.id} style={[styles.column, { width: columnWidth }]}>
+              .map(({ status, tasks: list }, ci) => (
+                <Animated.View key={status.id} entering={FadeInDown.duration(240).delay(ci * 60)} style={[styles.column, { width: columnWidth }]}>
                   <View style={styles.columnHeader}>
                     <View style={[styles.dot, { backgroundColor: status.color }]} />
                     <Text style={[styles.columnTitle, { color: theme.text }]}>{status.name}</Text>
-                    <Text style={[styles.columnCount, { color: theme.textSecondary }]}>{list.length}</Text>
+                    <View style={[styles.countPill, { backgroundColor: `${status.color}22` }]}>
+                      <Text style={[styles.columnCount, { color: status.color }]}>{list.length}</Text>
+                    </View>
                   </View>
                   <ScrollView style={styles.columnScroll} contentContainerStyle={styles.columnList} showsVerticalScrollIndicator={false}>
-                    {list.map((t) => (
-                      <Card key={t.id} task={t} onMove={() => setMoving(t)} />
+                    {list.map((t, ti) => (
+                      <Animated.View key={t.id} entering={FadeInDown.duration(220).delay(Math.min(ti, 8) * 30)} exiting={FadeOut.duration(150)} layout={LinearTransition.duration(220)}>
+                        <Card task={t} onMove={() => setMoving(t)} />
+                      </Animated.View>
                     ))}
                     <Pressable
                       accessibilityRole="button"
@@ -103,7 +109,7 @@ export default function ProjectScreen() {
                       <Text style={{ color: theme.textSecondary, fontSize: 14, fontWeight: '500' }}>Add task</Text>
                     </Pressable>
                   </ScrollView>
-                </View>
+                </Animated.View>
               ))}
           </ScrollView>
         ) : (
@@ -161,11 +167,15 @@ function Card({ task, onMove }: { task: TaskListItem; onMove: () => void }) {
   return (
     <View style={[styles.card, { backgroundColor: theme.background, borderColor: theme.border, opacity: done ? 0.75 : 1 }]}>
       <IconButton name="more" label="Move task" size={16} color={theme.textFaint} onPress={onMove} style={styles.cardMore} />
-      <Pressable
+      <PressableScale
         accessibilityRole="button"
+        scaleTo={0.97}
         onPress={() => router.push({ pathname: '/task/[id]', params: { id: task.id } })}
-        onLongPress={onMove}
-        style={({ pressed }) => [styles.cardBody, { opacity: pressed ? 0.7 : 1 }]}>
+        onLongPress={() => {
+          haptic('medium');
+          onMove();
+        }}
+        style={styles.cardBody}>
       <View style={styles.cardTop}>
         <Text style={[styles.cardTitle, { color: done ? theme.textSecondary : theme.text, textDecorationLine: done ? 'line-through' : 'none' }]}>{task.title}</Text>
       </View>
@@ -183,7 +193,7 @@ function Card({ task, onMove }: { task: TaskListItem; onMove: () => void }) {
           {task.assignee ? <Avatar name={task.assignee.full_name} color={task.assignee.avatar_color} size={24} /> : null}
         </View>
       </View>
-      </Pressable>
+      </PressableScale>
     </View>
   );
 }
@@ -195,11 +205,12 @@ const styles = StyleSheet.create({
   column: { gap: 10 },
   columnHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 4 },
   columnTitle: { fontSize: 15, fontWeight: '600' },
-  columnCount: { fontSize: 15, fontWeight: '500' },
+  countPill: { borderRadius: 10, paddingHorizontal: 7, paddingVertical: 1 },
+  columnCount: { fontSize: 12, fontWeight: '700' },
   columnScroll: { flexGrow: 0 },
   columnList: { gap: 10, paddingBottom: 120 },
   dot: { width: 10, height: 10, borderRadius: 5 },
-  card: { borderRadius: 12, borderWidth: StyleSheet.hairlineWidth },
+  card: { borderRadius: 12, borderWidth: StyleSheet.hairlineWidth, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 6, shadowOffset: { width: 0, height: 2 }, elevation: 1 },
   cardBody: { padding: 12, gap: 10 },
   cardTop: { flexDirection: 'row', alignItems: 'flex-start', gap: 4, paddingRight: 24 },
   cardTitle: { flex: 1, fontSize: 15, fontWeight: '500', lineHeight: 20 },

@@ -1,8 +1,9 @@
 import { useRouter } from 'expo-router';
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import {
   ActivityIndicator,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,9 +16,11 @@ import {
   type TextStyle,
   type ViewStyle,
 } from 'react-native';
+import Animated, { ZoomIn, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon, type IconName } from '@/components/icon';
+import { PressableScale } from '@/components/motion';
 import { MaxContentWidth, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
@@ -33,9 +36,11 @@ type ScreenProps = {
   padded?: boolean;
   footer?: ReactNode;
   headerBottom?: ReactNode;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 };
 
-export function Screen({ children, title, subtitle, back, right, scroll = true, padded = true, footer, headerBottom }: ScreenProps) {
+export function Screen({ children, title, subtitle, back, right, scroll = true, padded = true, footer, headerBottom, refreshing = false, onRefresh }: ScreenProps) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -74,7 +79,8 @@ export function Screen({ children, title, subtitle, back, right, scroll = true, 
     <ScrollView
       style={styles.flex}
       contentContainerStyle={[padded && styles.padded, { paddingBottom: insets.bottom + 100 }]}
-      keyboardShouldPersistTaps="handled">
+      keyboardShouldPersistTaps="handled"
+      refreshControl={onRefresh ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.accent} /> : undefined}>
       {children}
     </ScrollView>
   ) : (
@@ -114,9 +120,9 @@ export function Empty({ icon = 'tasks', title, body, action }: { icon?: IconName
   const theme = useTheme();
   return (
     <View style={styles.empty}>
-      <View style={[styles.emptyIcon, { backgroundColor: theme.surface }]}>
+      <Animated.View entering={ZoomIn.springify().damping(12)} style={[styles.emptyIcon, { backgroundColor: theme.surface }]}>
         <Icon name={icon} size={28} color={theme.textFaint} />
-      </View>
+      </Animated.View>
       <Text style={[styles.emptyTitle, { color: theme.text }]}>{title}</Text>
       {body ? <Text style={[styles.emptyBody, { color: theme.textSecondary }]}>{body}</Text> : null}
       {action}
@@ -162,19 +168,15 @@ export function Button({ title, variant = 'primary', icon, loading, small, style
     variant === 'primary' ? theme.accent : variant === 'secondary' ? theme.surface : variant === 'danger' ? theme.dangerSoft : 'transparent';
   const fg = variant === 'primary' ? theme.onAccent : variant === 'danger' ? theme.danger : variant === 'ghost' ? theme.accent : theme.text;
   return (
-    <Pressable
+    <PressableScale
       accessibilityRole="button"
       disabled={disabled || loading}
-      style={({ pressed }) => [
-        styles.button,
-        small && styles.buttonSmall,
-        { backgroundColor: bg, opacity: disabled ? 0.5 : pressed ? 0.8 : 1 },
-        style as StyleProp<ViewStyle>,
-      ]}
+      scaleTo={0.96}
+      style={[styles.button, small && styles.buttonSmall, { backgroundColor: bg, opacity: disabled ? 0.5 : 1 }, style as StyleProp<ViewStyle>]}
       {...rest}>
       {loading ? <ActivityIndicator color={fg} /> : icon ? <Icon name={icon} size={small ? 16 : 18} color={fg} /> : null}
       <Text style={[styles.buttonText, small && styles.buttonTextSmall, { color: fg }]}>{title}</Text>
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -281,21 +283,24 @@ export function ListRow({ children, onPress, style, last }: { children: ReactNod
 export function Card({ children, style, onPress }: { children: ReactNode; style?: StyleProp<ViewStyle>; onPress?: () => void }) {
   const theme = useTheme();
   return (
-    <Pressable
-      disabled={!onPress}
-      onPress={onPress}
-      style={({ pressed }) => [styles.card, { backgroundColor: theme.background, borderColor: theme.border, opacity: pressed ? 0.8 : 1 }, style]}>
+    <PressableScale disabled={!onPress} onPress={onPress} scaleTo={0.98} style={[styles.card, { backgroundColor: theme.background, borderColor: theme.border }, style]}>
       {children}
-    </Pressable>
+    </PressableScale>
   );
 }
 
+/** Progress bar whose fill animates to the new value. */
 export function ProgressBar({ value, color, height = 6 }: { value: number; color: string; height?: number }) {
   const theme = useTheme();
   const pct = Math.max(0, Math.min(100, Math.round(value * 100)));
+  const width = useSharedValue(0);
+  useEffect(() => {
+    width.set(withTiming(pct, { duration: 600 }));
+  }, [pct, width]);
+  const fill = useAnimatedStyle(() => ({ width: `${width.value}%` }));
   return (
     <View accessibilityRole="progressbar" accessibilityValue={{ now: pct, min: 0, max: 100 }} style={[styles.progress, { height, borderRadius: height / 2, backgroundColor: theme.surface }]}>
-      <View style={{ width: `${pct}%`, height: '100%', backgroundColor: color }} />
+      <Animated.View style={[{ height: '100%', backgroundColor: color, borderRadius: height / 2 }, fill]} />
     </View>
   );
 }

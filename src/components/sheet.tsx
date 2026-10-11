@@ -1,7 +1,9 @@
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon, type IconName } from '@/components/icon';
+import { haptic } from '@/components/motion';
 import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
@@ -24,22 +26,32 @@ type Props<T extends string> = {
   onClose: () => void;
 };
 
-/** Simple bottom sheet with a list of choices. Works on phone and web. */
+/** Bottom sheet with a list of choices. Slides up on phone and web. */
 export function OptionSheet<T extends string>({ visible, title, options, onSelect, onClose }: Props<T>) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable accessibilityLabel="Close" onPress={onClose} style={styles.backdrop} />
-      <View style={[styles.sheet, { backgroundColor: theme.background, paddingBottom: insets.bottom + Spacing.three }]}>
+    <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
+      <Animated.View entering={FadeIn.duration(160)} exiting={FadeOut.duration(140)} style={styles.backdrop}>
+        <Pressable accessibilityLabel="Close" onPress={onClose} style={styles.flex} />
+      </Animated.View>
+      <Animated.View
+        entering={SlideInDown.springify().damping(20).stiffness(220)}
+        exiting={SlideOutDown.duration(180)}
+        style={[styles.sheet, { backgroundColor: theme.background, paddingBottom: insets.bottom + Spacing.three }]}>
         <View style={[styles.handle, { backgroundColor: theme.border }]} />
-        {title ? <Text style={[styles.title, { color: theme.text }]}>{title}</Text> : null}
+        {title ? (
+          <Text numberOfLines={2} style={[styles.title, { color: theme.textSecondary }]}>
+            {title}
+          </Text>
+        ) : null}
         <ScrollView style={styles.list} bounces={false}>
           {options.map((o) => (
             <Pressable
               key={o.value}
               accessibilityRole="button"
               onPress={() => {
+                haptic('light');
                 onSelect(o.value);
                 onClose();
               }}
@@ -54,12 +66,13 @@ export function OptionSheet<T extends string>({ visible, title, options, onSelec
             </Pressable>
           ))}
         </ScrollView>
-      </View>
+      </Animated.View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  flex: { flex: 1 },
   backdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(17,24,39,0.45)' },
   sheet: {
     position: 'absolute',
@@ -74,11 +87,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     maxWidth: 560,
+    shadowColor: '#000',
+    shadowOpacity: 0.18,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: -6 },
   },
   handle: { width: 36, height: 5, borderRadius: 3, alignSelf: 'center', marginBottom: Spacing.two },
-  title: { fontSize: 15, fontWeight: '600', paddingHorizontal: Spacing.three, paddingVertical: Spacing.two },
+  title: { fontSize: 13, fontWeight: '600', paddingHorizontal: Spacing.three, paddingVertical: Spacing.two, textTransform: 'uppercase', letterSpacing: 0.4 },
   list: { flexGrow: 0 },
-  option: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, minHeight: 50, paddingHorizontal: Spacing.three, borderRadius: Radius.md },
+  option: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, minHeight: 52, paddingHorizontal: Spacing.three, borderRadius: Radius.md },
   optionText: { flex: 1 },
   label: { fontSize: 16, fontWeight: '500' },
   sublabel: { fontSize: 13 },
